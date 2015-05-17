@@ -1,0 +1,132 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="DBGoRehabModel" Alias="Self" p1:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:p1="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityContainer Name="DBGoRehabEntities" p1:LazyLoadingEnabled="true">
+    <EntitySet Name="tblEjercicio" EntityType="DBGoRehabModel.tblEjercicio" />
+    <EntitySet Name="tblPaciente" EntityType="DBGoRehabModel.tblPaciente" />
+    <EntitySet Name="tblRutina" EntityType="DBGoRehabModel.tblRutina" />
+    <EntitySet Name="tblTerapeuta" EntityType="DBGoRehabModel.tblTerapeuta" />
+    <EntitySet Name="tblUsuario" EntityType="DBGoRehabModel.tblUsuario" />
+    <AssociationSet Name="FK_Rutina_Ejercicio" Association="DBGoRehabModel.FK_Rutina_Ejercicio">
+      <End Role="tblEjercicio" EntitySet="tblEjercicio" />
+      <End Role="tblRutina" EntitySet="tblRutina" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Paciente_Usuario" Association="DBGoRehabModel.FK_Paciente_Usuario">
+      <End Role="tblUsuario" EntitySet="tblUsuario" />
+      <End Role="tblPaciente" EntitySet="tblPaciente" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Rutina_Paciente" Association="DBGoRehabModel.FK_Rutina_Paciente">
+      <End Role="tblPaciente" EntitySet="tblPaciente" />
+      <End Role="tblRutina" EntitySet="tblRutina" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Terapeuta_Usuario" Association="DBGoRehabModel.FK_Terapeuta_Usuario">
+      <End Role="tblUsuario" EntitySet="tblUsuario" />
+      <End Role="tblTerapeuta" EntitySet="tblTerapeuta" />
+    </AssociationSet>
+  </EntityContainer>
+  <EntityType Name="tblEjercicio">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Nombre" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Descripcion" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="SeccionCuerpo" Type="String" MaxLength="15" FixedLength="false" Unicode="true" />
+    <Property Name="URLVideoVimeo" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+    <Property Name="URLImagen" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+    <Property Name="Duracion" Type="Double" />
+    <Property Name="Nivel" Type="String" MaxLength="25" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="tblRutina" Relationship="DBGoRehabModel.FK_Rutina_Ejercicio" FromRole="tblEjercicio" ToRole="tblRutina" />
+  </EntityType>
+  <EntityType Name="tblPaciente">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Estado" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="Incapacidad" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="FechaUltimoTratamiento" Type="DateTime" Precision="3" />
+    <Property Name="IdUsuario" Type="Int32" />
+    <NavigationProperty Name="tblUsuario" Relationship="DBGoRehabModel.FK_Paciente_Usuario" FromRole="tblPaciente" ToRole="tblUsuario" />
+    <NavigationProperty Name="tblRutina" Relationship="DBGoRehabModel.FK_Rutina_Paciente" FromRole="tblPaciente" ToRole="tblRutina" />
+  </EntityType>
+  <EntityType Name="tblRutina">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="IdPaciente" Type="Int32" />
+    <Property Name="IdEjercicio" Type="Int32" />
+    <NavigationProperty Name="tblEjercicio" Relationship="DBGoRehabModel.FK_Rutina_Ejercicio" FromRole="tblRutina" ToRole="tblEjercicio" />
+    <NavigationProperty Name="tblPaciente" Relationship="DBGoRehabModel.FK_Rutina_Paciente" FromRole="tblRutina" ToRole="tblPaciente" />
+  </EntityType>
+  <EntityType Name="tblTerapeuta">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="IdUsuario" Type="Int32" />
+    <Property Name="Especialidad" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="tblUsuario" Relationship="DBGoRehabModel.FK_Terapeuta_Usuario" FromRole="tblTerapeuta" ToRole="tblUsuario" />
+  </EntityType>
+  <EntityType Name="tblUsuario">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="UserName" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+    <Property Name="PrimerNombre" Type="String" MaxLength="25" FixedLength="false" Unicode="true" />
+    <Property Name="PrimerApellido" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+    <Property Name="FechaIngreso" Type="DateTime" Precision="3" />
+    <Property Name="Contrasena" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="tblPaciente" Relationship="DBGoRehabModel.FK_Paciente_Usuario" FromRole="tblUsuario" ToRole="tblPaciente" />
+    <NavigationProperty Name="tblTerapeuta" Relationship="DBGoRehabModel.FK_Terapeuta_Usuario" FromRole="tblUsuario" ToRole="tblTerapeuta" />
+  </EntityType>
+  <Association Name="FK_Rutina_Ejercicio">
+    <End Type="DBGoRehabModel.tblEjercicio" Role="tblEjercicio" Multiplicity="0..1" />
+    <End Type="DBGoRehabModel.tblRutina" Role="tblRutina" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="tblEjercicio">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="tblRutina">
+        <PropertyRef Name="IdEjercicio" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Paciente_Usuario">
+    <End Type="DBGoRehabModel.tblUsuario" Role="tblUsuario" Multiplicity="0..1" />
+    <End Type="DBGoRehabModel.tblPaciente" Role="tblPaciente" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="tblUsuario">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="tblPaciente">
+        <PropertyRef Name="IdUsuario" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Rutina_Paciente">
+    <End Type="DBGoRehabModel.tblPaciente" Role="tblPaciente" Multiplicity="0..1" />
+    <End Type="DBGoRehabModel.tblRutina" Role="tblRutina" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="tblPaciente">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="tblRutina">
+        <PropertyRef Name="IdPaciente" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Terapeuta_Usuario">
+    <End Type="DBGoRehabModel.tblUsuario" Role="tblUsuario" Multiplicity="0..1" />
+    <End Type="DBGoRehabModel.tblTerapeuta" Role="tblTerapeuta" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="tblUsuario">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="tblTerapeuta">
+        <PropertyRef Name="IdUsuario" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+</Schema>

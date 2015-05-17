@@ -1,0 +1,60 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="DBGoRehabModelStoreContainer" CdmEntityContainer="DBGoRehabEntities">
+    <EntitySetMapping Name="tblEjercicio">
+      <EntityTypeMapping TypeName="DBGoRehabModel.tblEjercicio">
+        <MappingFragment StoreEntitySet="tblEjercicio">
+          <ScalarProperty Name="Nivel" ColumnName="Nivel" />
+          <ScalarProperty Name="Duracion" ColumnName="Duracion" />
+          <ScalarProperty Name="URLImagen" ColumnName="URLImagen" />
+          <ScalarProperty Name="URLVideoVimeo" ColumnName="URLVideoVimeo" />
+          <ScalarProperty Name="SeccionCuerpo" ColumnName="SeccionCuerpo" />
+          <ScalarProperty Name="Descripcion" ColumnName="Descripcion" />
+          <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="tblPaciente">
+      <EntityTypeMapping TypeName="DBGoRehabModel.tblPaciente">
+        <MappingFragment StoreEntitySet="tblPaciente">
+          <ScalarProperty Name="IdUsuario" ColumnName="IdUsuario" />
+          <ScalarProperty Name="FechaUltimoTratamiento" ColumnName="FechaUltimoTratamiento" />
+          <ScalarProperty Name="Incapacidad" ColumnName="Incapacidad" />
+          <ScalarProperty Name="Estado" ColumnName="Estado" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="tblRutina">
+      <EntityTypeMapping TypeName="DBGoRehabModel.tblRutina">
+        <MappingFragment StoreEntitySet="tblRutina">
+          <ScalarProperty Name="IdEjercicio" ColumnName="IdEjercicio" />
+          <ScalarProperty Name="IdPaciente" ColumnName="IdPaciente" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="tblTerapeuta">
+      <EntityTypeMapping TypeName="DBGoRehabModel.tblTerapeuta">
+        <MappingFragment StoreEntitySet="tblTerapeuta">
+          <ScalarProperty Name="Especialidad" ColumnName="Especialidad" />
+          <ScalarProperty Name="IdUsuario" ColumnName="IdUsuario" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="tblUsuario">
+      <EntityTypeMapping TypeName="DBGoRehabModel.tblUsuario">
+        <MappingFragment StoreEntitySet="tblUsuario">
+          <ScalarProperty Name="Contrasena" ColumnName="Contrasena" />
+          <ScalarProperty Name="FechaIngreso" ColumnName="FechaIngreso" />
+          <ScalarProperty Name="PrimerApellido" ColumnName="PrimerApellido" />
+          <ScalarProperty Name="PrimerNombre" ColumnName="PrimerNombre" />
+          <ScalarProperty Name="UserName" ColumnName="UserName" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+  </EntityContainerMapping>
+</Mapping>
