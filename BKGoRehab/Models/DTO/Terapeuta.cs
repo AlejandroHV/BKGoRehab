@@ -19,6 +19,8 @@ namespace BKGoRehab.Models.DTO
 
         public string PrimerApellido { get; set; }
 
+        public string UserName { get; set; }
 
+        public string Contrasena { get; set; }
     }
 }

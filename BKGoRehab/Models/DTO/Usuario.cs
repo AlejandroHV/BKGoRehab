@@ -12,5 +12,7 @@ namespace BKGoRehab.Models.DTO
         public string UserName { get; set; }
 
         public string PassWord { get; set; }
+
+
     }
 }

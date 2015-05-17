@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using BKGoRehab.Models;
 using BKGoRehab.Models.DTO;
+using BKGoRehab.Content.Util;
 
 namespace BKGoRehab.Models.DAL
 {
@@ -128,27 +129,38 @@ namespace BKGoRehab.Models.DAL
         }
 
 
-        public List<Ejercicio> GetPatientExcercisesByPatientId(int patientId)
+        public List<Ejercicio> GetPatientExcercisesByPatientId(int patientId ,SystemFail error)
         {
-            var objectExcercises = from excercises in _dbGoRehabContext.tblEjercicio
-                                   join routine in _dbGoRehabContext.tblRutina on excercises.Id equals routine.IdEjercicio
-                                   join patient in _dbGoRehabContext.tblPaciente on routine.IdPaciente equals patient.Id
-                                   where patient.Id == patientId
-                                   select new Ejercicio
-                                   {
-                                       Id = excercises.Id,
-                                       Nombre = excercises.Nombre,
-                                       Descripcion = excercises.Descripcion,
-                                       Nivel = excercises.Nivel,
-                                       Duracion = (double)excercises.Duracion,
-                                       SeccionCuerpo = excercises.SeccionCuerpo,
-                                       UrlImagen = excercises.URLImagen,
-                                       UrlVideo = excercises.URLVideoVimeo
+            try
+            {
+                var objectExcercises = from excercises in _dbGoRehabContext.tblEjercicio
+                                       join routine in _dbGoRehabContext.tblRutina on excercises.Id equals routine.IdEjercicio
+                                       join patient in _dbGoRehabContext.tblPaciente on routine.IdPaciente equals patient.Id
+                                       where patient.Id == patientId
+                                       select new Ejercicio
+                                       {
+                                           Id = excercises.Id,
+                                           Nombre = excercises.Nombre,
+                                           Descripcion = excercises.Descripcion,
+                                           Nivel = excercises.Nivel,
+                                           Duracion = (double)excercises.Duracion,
+                                           SeccionCuerpo = excercises.SeccionCuerpo,
+                                           UrlImagen = excercises.URLImagen,
+                                           UrlVideo = excercises.URLVideoVimeo
 
-                                   };
+                                       };
 
 
-            return objectExcercises.ToList();
+                return objectExcercises.ToList();
+            }
+            catch (Exception ex)
+            {
+                error.IsError = true;
+                error.Error = ex;
+                error.Message = "Error al obtener los ejercicios del paciente";
+                return null;
+            }
+            
 
         }
 
@@ -182,66 +194,114 @@ namespace BKGoRehab.Models.DAL
             return userPatient;
             
         }
-        public Paciente GetPatientByUserNameAndPassword(string userName,string password)
+        public Paciente GetPatientByUserNameAndPassword(string userName,string password, SystemFail error)
         {
             Paciente userPatient = null;
-            if (!string.IsNullOrEmpty(userName))
+            try
             {
-                var userObject = (from user in _dbGoRehabContext.tblUsuario
-                                  where user.UserName.Equals(userName)
-                                  where user.Contrasena.Equals(password)
-                                  select user).FirstOrDefault();
-                if (userObject != null)
+                if (!string.IsNullOrEmpty(userName))
                 {
-                    userPatient = (from patient in _dbGoRehabContext.tblPaciente
-                                   where patient.IdUsuario == userObject.Id
-                                   select new Paciente
-                                   {
-                                       Id = patient.Id,
-                                       PrimerApellido = userObject.PrimerApellido,
-                                       PrimerNombre = userObject.PrimerNombre,
-                                       Estado = patient.Estado,
-                                       FechaUltimoTratamiento = (DateTime)patient.FechaUltimoTratamiento,
-                                       Incapacidad = patient.Incapacidad,
-                                       UserName = userObject.UserName,
-                                       Contrasena = userObject.Contrasena
-                                   }).FirstOrDefault();
+                    var userObject = (from user in _dbGoRehabContext.tblUsuario
+                                      where user.UserName.Equals(userName)
+                                      where user.Contrasena.Equals(password)
+                                      select user).FirstOrDefault();
+                    if (userObject != null)
+                    {
+                        userPatient = (from patient in _dbGoRehabContext.tblPaciente
+                                       where patient.IdUsuario == userObject.Id
+                                       select new Paciente
+                                       {
+                                           Id = patient.Id,
+                                           PrimerApellido = userObject.PrimerApellido,
+                                           PrimerNombre = userObject.PrimerNombre,
+                                           Estado = patient.Estado,
+                                           FechaUltimoTratamiento = (DateTime)patient.FechaUltimoTratamiento,
+                                           Incapacidad = patient.Incapacidad,
+                                           UserName = userObject.UserName,
+                                           Contrasena = userObject.Contrasena
+                                       }).FirstOrDefault();
+                        if (userPatient == null)
+                        {
+                            error.Message = "El usuario no es un terapeuta.";
 
+                        }
+                    }
+                    else
+                    {
+                        error.Message = "El usuario no es un paciente.";
+                    }
+                }
+                else
+                {
+                    error.Message = "Los datos de log in son insuficientes.";
                 }
             }
+            catch (Exception ex)
+            {
+                error.IsError = true;
+                error.Error = ex;
+                error.Message = "Error al logear al Paciente";
+                userPatient = null;
+            }
+            
             return userPatient;
 
         }
 
-        /*public Paciente GetTerapistByUserNameAndPassword(string userName, string password)
+        public Terapeuta GetTerapistByUserNameAndPassword(string userName, string password,SystemFail error)
         {
-            Paciente userPatient = null;
-            if (!string.IsNullOrEmpty(userName))
+            Terapeuta userTherapist = null;
+            try
             {
-                var userObject = (from user in _dbGoRehabContext.tblUsuario
-                                  where user.UserName.Equals(userName)
-                                  where user.Contrasena.Equals(password)
-                                  select user).FirstOrDefault();
-                if (userObject != null)
+                if (!string.IsNullOrEmpty(userName))
                 {
-                    userPatient = (from terapits in _dbGoRehabContext.tblTerapeuta
-                                   where terapits.IdUsuario == userObject.Id
-                                   select new Paciente
-                                   {
-                                       Id = terapits.Id,
-                                       PrimerApellido = userObject.PrimerApellido,
-                                       PrimerNombre = userObject.PrimerNombre,
-                                       Estado = patient.Estado,
-                                       FechaUltimoTratamiento = (DateTime)patient.FechaUltimoTratamiento,
-                                       Incapacidad = patient.Incapacidad,
-                                       UserName = userObject.UserName,
-                                       Contrasena = userObject.Contrasena
-                                   }).FirstOrDefault();
+                    var userObject = (from user in _dbGoRehabContext.tblUsuario
+                                      where user.UserName.Equals(userName)
+                                      where user.Contrasena.Equals(password)
+                                      select user).FirstOrDefault();
+                    if (userObject != null)
+                    {
+                        userTherapist = (from therapits in _dbGoRehabContext.tblTerapeuta
+                                         where therapits.IdUsuario == userObject.Id
+                                         select new Terapeuta
+                                         {
+                                             Id = therapits.Id,
+                                             PrimerApellido = userObject.PrimerApellido,
+                                             PrimerNombre = userObject.PrimerNombre,
+                                             Especialidad = therapits.Especialidad,
+                                             UserName = userObject.UserName,
+                                             Contrasena = userObject.Contrasena
+                                         }).FirstOrDefault();
 
+                        if (userTherapist == null)
+                        {
+                            error.Message = "El usuario no es un terapeuta.";
+                             userTherapist = null;
+                        }
+                    }
+                    else
+                    {
+                        
+                            error.Message = "El usuarios no fue encontrado o los datos son incorrectos.";
+                            userTherapist = null;
+                        
+                    }
+                }else
+                {
+                    error.Message = "Los datos de log in son insuficientes.";
+                    userTherapist = null;
                 }
+                
             }
-            return userPatient;
+            catch (Exception ex)
+            {
+                error.IsError = true;
+                error.Error = ex;
+                error.Message = "Error al logear al terapeuta";
+                userTherapist = null;
+            }
+            return userTherapist;
 
-        }*/
+        }
     }
 }

@@ -7,6 +7,7 @@ using System.Web.Http;
 using BKGoRehab.Models;
 using BKGoRehab.Models.DTO;
 using BKGoRehab.Models.DAL;
+using BKGoRehab.Content.Util;
 
 
 namespace BKGoRehab.Controllers
@@ -49,62 +50,143 @@ namespace BKGoRehab.Controllers
         /// </summary>
         /// <param name="patientId">Id/Primary of the paitient</param>
         /// <returns>List of Ejercicio object. Null if there are non excercises for the user</returns>
-        public List<Ejercicio> GetPatientExcercises(int patientId)
+        public ApiResponse GetPatientExcercises(int patientId)
         {
-            try
+            SystemFail error = new SystemFail();
+            if (patientId != 0)
             {
-                return dbDal.GetPatientExcercisesByPatientId(patientId);
+                var excercises = dbDal.GetPatientExcercisesByPatientId(patientId, error);
+                if (error.IsError)
+                {
+                    return new ApiResponse
+                    {
+                        Data = null,
+                        Error = error.Error,
+                        Message = error.Message
+                    };
+                }
+                if (excercises == null && !error.IsError)
+                {
+                    return new ApiResponse
+                    {
+                        Data = null,
+                        Message = error.Message
+                    };
+                }
+                return new ApiResponse
+                {
+                    Data = excercises
+                };
             }
-            catch (Exception)
+            else
             {
+                return new ApiResponse
+                {
+                    Message = "Parametro patientId Vacio"
+                };
+            }
 
-                return null;
-            }
+
+
 
         }
 
         [HttpPost]
-        public Paciente LoginPatientByUserName([FromBody] Usuario user)
+        public ApiResponse LoginPatientByUserName([FromBody] Usuario user)
         {
-            Paciente loggedPatient = null;
 
-            try
+            SystemFail error = new SystemFail();
+            if (user != null)
             {
-                if (user != null)
+                var loggedPatient = dbDal.GetPatientByUserNameAndPassword(user.UserName, user.PassWord, error);
+                if (error.IsError)
                 {
-                    loggedPatient = dbDal.GetPatientByUserNameAndPassword(user.UserName, user.PassWord);
+                    return new ApiResponse
+                    {
+                        Data = null,
+                        Error = error.Error,
+                        Message = error.Message
+                    };
+                }
+                if (loggedPatient == null && !error.IsError)
+                {
+                    return new ApiResponse
+                    {
+                        Data = null,
+                        Message = error.Message
+                    };
                 }
 
+                return new ApiResponse
+                {
+                    Data = loggedPatient,
+                    Message = "Terapista Logeado"
+                };
             }
-            catch (Exception)
+            else
             {
-
-                
+                return new ApiResponse
+                {
+                    Message = "No se recibio la informacion del usuario.(Parametro User vacio)"
+                };
             }
 
-            return loggedPatient;
+
+
+
         }
 
-        /*public Paciente LoginTerapitsByUserName([FromBody] Usuario user)
+        [HttpPost]
+        public ApiResponse LoginTerapitsByUserName([FromBody] Usuario user, string dummy)
         {
-            Paciente loggedPatient = null;
 
-            try
+            SystemFail error = new SystemFail();
+            if (user != null)
             {
-                if (user != null)
+                var therapist = dbDal.GetTerapistByUserNameAndPassword(user.UserName, user.PassWord, error);
+                if (error.IsError)
                 {
-                    loggedPatient = dbDal.GetUserByUserNameAndPassword(user.UserName, user.PassWord);
+                    return new ApiResponse
+                    {
+                        Data = null,
+                        Error = error.Error,
+                        Message = error.Message
+                    };
+                }
+                if (therapist == null && !error.IsError)
+                {
+                    return new ApiResponse
+                    {
+                        Data = null,
+                        Message = error.Message
+                    };
                 }
 
+                return new ApiResponse
+                {
+                    Data = therapist,
+                    Message = "Terapista Logeado"
+                };
             }
-            catch (Exception)
+            else
             {
-
+                return new ApiResponse
+                {
+                    Data = null,
+                    Error = null,
+                    Message = "No se recibio la informacion del usuario.(Parametro User vacio)"
+                };
 
             }
 
-            return loggedPatient;
-        }*/
+
+
+
+
+
+
+
+        }
 
     }
 }
