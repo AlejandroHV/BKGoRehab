@@ -5,6 +5,7 @@ using System.Web;
 using BKGoRehab.Models;
 using BKGoRehab.Models.DTO;
 using BKGoRehab.Models.DAL;
+using BKGoRehab.Content.Util;
 using System.Web.Http;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -64,7 +65,27 @@ namespace BKGoRehab.Controllers
 
         }
 
+        public ApiResponse InsertNewExcercise([FromBody] Ejercicio ejercicio,string dummie)
+        {
+            SystemFail error = new SystemFail();
+            if (ejercicio != null)
+            {
+                dbDal.InsertExcercise(ejercicio, error);
+                if (error.IsError)
+                {
+                    return new ApiResponse { Error = error.Error, Message = error.Message };
+                }
+                return new ApiResponse { Message = error.Message };
+            }else
+            {
 
+                return new ApiResponse { Message = "El parametro ejercicio se encuntra vacio" };
+            }
+
+
+        }
+
+        [HttpPost]
         /// <summary>
         /// Create a new tblRutina register in the database. Asign a excercise to an a user.
         /// </summary>
@@ -87,7 +108,7 @@ namespace BKGoRehab.Controllers
         }
 
 
-        
-        
+
+
     }
 }

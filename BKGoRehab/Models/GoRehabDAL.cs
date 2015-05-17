@@ -303,5 +303,33 @@ namespace BKGoRehab.Models.DAL
             return userTherapist;
 
         }
+
+
+        public void InsertExcercise(Ejercicio ejercicio,SystemFail error)
+        {
+            try
+            {
+                tblEjercicio newExcercise = new tblEjercicio();
+                newExcercise.Nombre = ejercicio.Nombre;
+                newExcercise.Nivel = ejercicio.Nivel;
+                newExcercise.SeccionCuerpo = ejercicio.SeccionCuerpo;
+                newExcercise.URLImagen = ejercicio.UrlImagen;
+                newExcercise.URLVideoVimeo = ejercicio.UrlVideo;
+                newExcercise.Descripcion = ejercicio.Descripcion;
+                newExcercise.Duracion = ejercicio.Duracion;
+                _dbGoRehabContext.Entry(newExcercise).State = System.Data.EntityState.Added;
+                _dbGoRehabContext.SaveChanges();
+                error.Message = "Ejercicio guardado correctamente";
+            }
+            catch (Exception ex)
+            {
+                error.Message = "Error al  guardar el ejercicio";
+                error.Error = ex;
+                error.IsError = true;
+            }
+            
+
+
+        }
     }
 }

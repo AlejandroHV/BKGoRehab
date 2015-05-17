@@ -169,7 +169,6 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ExcercisesController.cs" />
     <Compile Include="Controllers\UserController.cs" />
-    <Compile Include="Controllers\ValuesController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -298,6 +297,7 @@
       <DependentUpon>DBGoRehab.edmx</DependentUpon>
       <LastGenOutput>DBGoRehab.cs</LastGenOutput>
     </Content>
+    <None Include="Properties\PublishProfiles\Alejandro.pubxml" />
     <None Include="Scripts\jquery-1.8.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.8.2.js" />
     <Content Include="Scripts\jquery-1.8.2.min.js" />

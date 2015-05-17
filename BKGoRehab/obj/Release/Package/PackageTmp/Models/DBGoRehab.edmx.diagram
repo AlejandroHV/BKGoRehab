@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="2543cc4f4a5c49edb3984411695931cd" Name="Diagrama1">
+        <EntityTypeShape EntityType="DBGoRehabModel.tblEjercicio" Width="1.5" PointX="3" PointY="6.875" />
+        <EntityTypeShape EntityType="DBGoRehabModel.tblPaciente" Width="1.5" PointX="3" PointY="1.125" />
+        <EntityTypeShape EntityType="DBGoRehabModel.tblRutina" Width="1.5" PointX="5.25" PointY="1.25" />
+        <EntityTypeShape EntityType="DBGoRehabModel.tblTerapeuta" Width="1.5" PointX="3" PointY="4.125" />
+        <EntityTypeShape EntityType="DBGoRehabModel.tblUsuario" Width="1.5" PointX="0.75" PointY="2.25" />
+        <AssociationConnector Association="DBGoRehabModel.FK_Rutina_Ejercicio" />
+        <AssociationConnector Association="DBGoRehabModel.FK_Paciente_Usuario" />
+        <AssociationConnector Association="DBGoRehabModel.FK_Rutina_Paciente" />
+        <AssociationConnector Association="DBGoRehabModel.FK_Terapeuta_Usuario" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>
